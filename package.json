@@ -1,0 +1,24 @@
+{
+  "name": "pushapps-cordova-plugin",
+  "version": "6.3.0",
+  "description": "PushApps SDK for Phonegap - Supports Android and iOS platforms (www.pushapps.mobi)",
+  "cordova": {
+    "id": "pushapps-cordova-plugin",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PushAppsPlatform/cordova-pushapps-sdk.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "author": "PushApps",
+  "license": "MIT",
+  "homepage": "https://github.com/PushAppsPlatform/cordova-pushapps-sdk"
+}
