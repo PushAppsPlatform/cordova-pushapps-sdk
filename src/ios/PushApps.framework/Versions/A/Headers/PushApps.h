@@ -22,6 +22,19 @@ FOUNDATION_EXPORT double PushAppsVersionNumber;
 //! Project version string for PushApps.
 FOUNDATION_EXPORT const unsigned char PushAppsVersionString[];
 
+@protocol PushAppsDelegate <NSObject>
+
+@optional
+- (void)onDidRegisterToPushNotificationsWithDeviceToken:(NSString *)deviceToken;
+
+@optional
+- (void)onDidFailToRegisterToPushNotificationsWithError:(NSError *)error;
+
+@optional
+- (void)onDidReceiveRemoteNotificationWithInfo:(NSDictionary *)userInfo;
+
+@end
+
 // In this header, you should import all the public headers of your framework using statements like #import <PushApps/PublicHeader.h>
 
 typedef void (^PASimpleCompletionBlock)();
@@ -46,13 +59,17 @@ typedef void (^getCampaignDetailsCompletion)(NSDictionary *campaignDetails, NSEr
 
 @interface PushApps : NSObject
 
+@property (nonatomic, weak) id<PushAppsDelegate> delegate;
++ (void)setDelegate:(id<PushAppsDelegate>)delegate;
+
 // check this flag to see if the Pushapps service is currently available
 + (BOOL)isPushAppsServiceAvailable;
 
 // initialize push notifications for the application
-+ (void)registerApplication:(UIApplication *)application forPushNotifications:(NSDictionary *)launchOptions;
++ (void)registerForPushNotifications:(NSDictionary *)launchOptions;
 
-+ (void)unregisterFromPushNotifications;
++ (void)enablePushNotifications;
++ (void)disablePushNotifications;
 
 + (BOOL)isRegisterForPushNotifications;
 
@@ -66,14 +83,18 @@ typedef void (^getCampaignDetailsCompletion)(NSDictionary *campaignDetails, NSEr
 // send APNS device token to the Pushapps service
 + (void)setDevicePushToken:(NSData *)deviceToken;
 
++ (void)failedToRegisterToPushNotificationsWithError:(NSError *)error;
+
 // set call back block to handle campaign content
 + (void)setNotificationContentHandler:(PANotificationContentHandlerBlock)handler;
 
 // handle user action. return YES if handles or NO if not a PushApps notification
 + (BOOL)handleNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(PASimpleCompletionBlock)completionHandler;
 
++ (void)handleReceivedNotification:(NSDictionary *)userInfo;
+
 // report article view
-+ (void)reportArticleView:(NSURL *)articleUrl;
++ (void)reportArticleView:(NSString *)articleUrl;
 
 + (void)getWidgetFeedForParams:(NSDictionary *)params withCompletionBlock:(PACompletionBlock)completion;
 
