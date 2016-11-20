@@ -7,7 +7,7 @@ PushNotification.prototype.onDeviceReady = function (sdkKey) {
 };
 
 PushNotification.prototype.registerToPushNotifications = function (successCallback, errorCallback) {
-    exec(successCallback, errorCallback, 'PushApps', 'registerToPushNotifications’, []);
+    exec(successCallback, errorCallback, 'PushApps', 'registerToPushNotifications', []);
 };
 
 PushNotification.prototype.getDeviceId = function (successCallback) {
