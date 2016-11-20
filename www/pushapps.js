@@ -1,9 +1,5 @@
 var exec = cordova.require('cordova/exec');
 
-/**
- * PushNotification empty constructor
- */
-
 var PushNotification = function() {};
 
 PushNotification.prototype.onDeviceReady = function (sdkKey) {
