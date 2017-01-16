@@ -1,6 +1,5 @@
 #import "CDVPushApps.h"
 #import "AppDelegate.h"
-#import <PushApps/PushApps.h>
 
 #define CDVPushApps_DeviceTokenCallbackId @"CDVPushApps_DeviceTokenCallbackId"
 #define CDVPushApps_LastPushDictionary @"CDVPushApps_LastPushDictionary"
@@ -38,17 +37,20 @@
     [PushApps setDelegate:self];
 
     NSString *sdkKey = [command.arguments objectAtIndex:0];
+    NSString *groupName = [command.arguments objectAtIndex:1];
 
     if (!sdkKey) {
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"sdkKey parameter is mandatory"];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
 
-    [PushApps registerDeviceWithSdkKey:sdkKey];
+    [PushApps registerDeviceWithSdkKey:sdkKey andAppGroupsName:groupName withNotificationClickHandler:^(NSDictionary *contentInfo) {
+        [self updateWithMessageParams:contentInfo];
+    }];
 
     NSDictionary *checkForLastMessage = [[NSUserDefaults standardUserDefaults] objectForKey:CDVPushApps_LastPushDictionary];
     if (checkForLastMessage) {
-        [self updateWithMessageParams:checkForLastMessage];
+        [PushApps handleReceivedNotification:checkForLastMessage];
 
         // Clear last message
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:CDVPushApps_LastPushDictionary];
@@ -204,11 +206,12 @@
                 [dictionary setObject:JSON forKey:key];
             }
             else {
-                [dictionary setObject:[pushNotification objectForKey:key] forKey:key];
+                NSString *str = [pushNotification objectForKey:key];
+                [dictionary setObject:str forKey:key];
             }
 
-        }
-        else {
+        } else {
+
             [dictionary setObject:[pushNotification objectForKey:key] forKey:key];
         }
     }
@@ -219,6 +222,7 @@
     NSString *jsonString = @"{}";
     if (jsonData) {
         jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        jsonString = [jsonString stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\\\\\""];
     }
 
     // Update JS

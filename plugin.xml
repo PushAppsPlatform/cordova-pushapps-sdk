@@ -163,13 +163,18 @@
             <access origin="*.pushapps.mobi" />
         </config-file>
 
-        <resource-file src="src/ios/PANotificationCustomVC.xib"/>
-
         <header-file src="src/ios/CDVPushApps.h" target-dir="ios"/>
         <source-file src="src/ios/CDVPushApps.m" target-dir="ios"/>
 
+        <header-file src="src/ios/AppDelegate+notification.h" target-dir="ios"/>
+        <source-file src="src/ios/AppDelegate+notification.m" target-dir="ios"/>
+
         <!-- PushApps framework -->
-        <framework src="src/ios/PushApps.framework" custom="true" />
+        <header-file src="src/ios/PushApps.h" target-dir="ios"/>
+        <header-file src="src/ios/PATag.h" target-dir="ios"/>
+        <header-file src="src/ios/PANotificationContentExtension.h" target-dir="ios"/>
+        <header-file src="src/ios/PANotificationServiceExtension.h" target-dir="ios"/>
+        <source-file src="src/ios/PushApps" framework="true"/>
 
         <!-- System frameworks -->
         <framework src="Foundation.framework" weak="true" />
