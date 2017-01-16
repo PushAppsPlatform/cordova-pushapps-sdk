@@ -137,6 +137,7 @@ public class PushAppsPlugin extends CordovaPlugin {
 
     private void internalOnMessage(JSONObject message) {
         String newString = message.toString();
+        newString = newString.replace("\\\"", "\\\\\"");
         final String jsStatement = String.format("PushNotification.messageClicked('%s');", newString);
         cordova.getActivity().runOnUiThread(new Runnable() {
             @Override
